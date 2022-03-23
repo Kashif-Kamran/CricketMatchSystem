@@ -35,7 +35,6 @@ public class MysqlDAOFactory extends DAOFactory
 		dataSource = null;
 	}
 	}
-
 	public Connection getConnection()
 	{
 		try
@@ -52,7 +51,6 @@ public class MysqlDAOFactory extends DAOFactory
 		}
 
 	}
-
 	public void freeConnection(Connection c)
 	{
 		try
@@ -65,7 +63,6 @@ public class MysqlDAOFactory extends DAOFactory
 			e.printStackTrace();
 		}
 	}
-
 	public static MysqlDAOFactory getInstance()
 	{
 		if (mysqlDAOFactory == null)
@@ -74,7 +71,6 @@ public class MysqlDAOFactory extends DAOFactory
 		}
 		return mysqlDAOFactory;
 	}
-
 	@Override
 	public UserDAO getUserDao()
 	{

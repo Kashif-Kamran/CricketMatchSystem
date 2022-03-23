@@ -1,31 +1,29 @@
 package BusinessLayer.UserModule;
 
+import java.util.List;
+
+import javax.management.InstanceNotFoundException;
+
 import ServiceLayer.DataSource.DAOFactory;
 import ServiceLayer.DataSource.UserDAO;
 
 public class User
 {
-	String firstName;
-	String lastName;
-	String cnic;
-	String UserName;
-	String password;
-	int age;
+	String firstName = "";
+	String lastName = "";
+	String cnic = "";
+	String UserName = "";
+	String password = "";
+	int age = -1;
+
+	// Getter Functions
 	public int getAge()
 	{
 		return age;
 	}
-	public void setAge(int age)
-	{
-		this.age = age;
-	}
 	public String getCnic()
 	{
 		return cnic;
-	}
-	public void setCnic(String cnic)
-	{
-		this.cnic = cnic;
 	}
 	public String getFirstName()
 	{
@@ -43,6 +41,16 @@ public class User
 	{
 		return password;
 	}
+
+	// Setter Functions
+	public void setAge(int age)
+	{
+		this.age = age;
+	}
+	public void setCnic(String cnic)
+	{
+		this.cnic = cnic;
+	}
 	public void setFirstName(String firstName)
 	{
 		this.firstName = firstName;
@@ -59,17 +67,69 @@ public class User
 	{
 		this.password = password;
 	}
-	public static int totalUsers()
+
+	// DataBase CRUD Operations
+	public static int getUsersCountFromDB()
 	{
 		DAOFactory factory = DAOFactory.getDataServiceInstance(1);
 		UserDAO dao = factory.getUserDao();
 		return dao.countUsers();
 	}
-	public void addToDatabase()
+
+	public void addToDB() throws Exception
 	{
 		DAOFactory fact = DAOFactory.getDataServiceInstance(1);
 		UserDAO dao = fact.getUserDao();
-		dao.addUser(this);
-
+		try {
+			dao.addUser(this);
+		}
+		catch(IllegalArgumentException exc) {
+			throw new IllegalArgumentException("Unable to Add user. Reason: User Name is already Present");
+		}
 	}
+
+	public static User loadUserFromDB(String userName) throws InstanceNotFoundException
+	{
+		DAOFactory factory = DAOFactory.getDataServiceInstance(1);
+		UserDAO userDao = factory.getUserDao();
+		User value = userDao.getUser(userName);
+		if (value == null)
+		{
+			throw new InstanceNotFoundException("Wrong User Name");
+		}
+		else
+		{
+			return value;
+		}
+	}
+
+	public static List<User> getAllUsersFromDB()
+	{
+		DAOFactory factory = DAOFactory.getDataServiceInstance(1);
+		UserDAO userDao = factory.getUserDao();
+		return userDao.getAllUsers();
+	}
+
+	public void deleteUserFromDB() throws Exception
+	{
+		DAOFactory factory = DAOFactory.getDataServiceInstance(1);
+		UserDAO userDao = factory.getUserDao();
+		userDao.deleteUser(this);
+	}
+
+	public void updateDataDB() throws Exception
+	{
+		DAOFactory factory = DAOFactory.getDataServiceInstance(1);
+		UserDAO userDao = factory.getUserDao();
+		userDao.updateUser(this);
+	}
+	// Other Helping
+	@Override
+	public String toString()
+	{
+		// TODO Auto-generated method stub
+		return this.UserName + "  " + this.password + "  " + this.firstName + "  " + this.lastName + "  " + this.cnic
+				+ "  " + this.age;
+	}
+
 }

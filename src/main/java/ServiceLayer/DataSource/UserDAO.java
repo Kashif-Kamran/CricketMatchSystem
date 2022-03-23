@@ -1,6 +1,6 @@
 package ServiceLayer.DataSource;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import BusinessLayer.UserModule.User;
 
@@ -8,13 +8,13 @@ public interface UserDAO
 {
 	public int countUsers();
 
-	public boolean addUser(User user);
+	public boolean addUser(User user) throws Exception;
 
-	public boolean updateUser(User user);
+	public boolean updateUser(User user) throws Exception;
 
-	public boolean deleteUser(User user);
+	public boolean deleteUser(User user) throws Exception;
 
-	public boolean getUser(String userName);
+	public User getUser(String userName);
 
-	public ArrayList<User> getAllUsers();
+	public List<User> getAllUsers();
 }
