@@ -2,8 +2,6 @@ package BusinessLayer.UserModule;
 
 import java.util.List;
 
-import javax.management.InstanceNotFoundException;
-
 import ServiceLayer.DataSource.DAOFactory;
 import ServiceLayer.DataSource.UserDAO;
 
@@ -15,7 +13,6 @@ public class User
 	String UserName = "";
 	String password = "";
 	int age = -1;
-
 	// Getter Functions
 	public int getAge()
 	{
@@ -75,7 +72,6 @@ public class User
 		UserDAO dao = factory.getUserDao();
 		return dao.countUsers();
 	}
-
 	public void addToDB() throws Exception
 	{
 		DAOFactory fact = DAOFactory.getDataServiceInstance(1);
@@ -88,35 +84,25 @@ public class User
 		}
 	}
 
-	public static User loadUserFromDB(String userName) throws InstanceNotFoundException
+	public static User loadUserFromDB(String userName)
 	{
 		DAOFactory factory = DAOFactory.getDataServiceInstance(1);
 		UserDAO userDao = factory.getUserDao();
 		User value = userDao.getUser(userName);
-		if (value == null)
-		{
-			throw new InstanceNotFoundException("Wrong User Name");
-		}
-		else
-		{
-			return value;
-		}
+		return value;
 	}
-
 	public static List<User> getAllUsersFromDB()
 	{
 		DAOFactory factory = DAOFactory.getDataServiceInstance(1);
 		UserDAO userDao = factory.getUserDao();
 		return userDao.getAllUsers();
 	}
-
 	public void deleteUserFromDB() throws Exception
 	{
 		DAOFactory factory = DAOFactory.getDataServiceInstance(1);
 		UserDAO userDao = factory.getUserDao();
 		userDao.deleteUser(this);
 	}
-
 	public void updateDataDB() throws Exception
 	{
 		DAOFactory factory = DAOFactory.getDataServiceInstance(1);

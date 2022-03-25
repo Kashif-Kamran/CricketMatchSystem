@@ -7,6 +7,8 @@ public abstract class DAOFactory
 	private static final int MySQLDataSource = 1;
 	public abstract UserDAO getUserDao();
 
+	public abstract AdminDAO getAdminDao();
+
 	public static DAOFactory getDataServiceInstance(int whichFactory)
 	{
 		if (whichFactory == 1)

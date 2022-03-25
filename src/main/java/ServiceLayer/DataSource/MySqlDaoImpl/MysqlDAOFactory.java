@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import com.mysql.cj.jdbc.DatabaseMetaData;
 import com.mysql.cj.jdbc.MysqlConnectionPoolDataSource;
 
+import ServiceLayer.DataSource.AdminDAO;
 import ServiceLayer.DataSource.DAOFactory;
 import ServiceLayer.DataSource.UserDAO;
 
@@ -51,16 +52,19 @@ public class MysqlDAOFactory extends DAOFactory
 		}
 
 	}
-	public void freeConnection(Connection c)
+
+	public boolean freeConnection(Connection c)
 	{
 		try
 		{
 			c.close();
 			System.out.println("3. Connection Freed: " + dbMetaData.getDatabaseProductName() + " --> Passed");
+			return true;
 		} catch (SQLException e)
 		{
 			System.out.println("3. Connection Establish: --> Failed");
 			e.printStackTrace();
+			return false;
 		}
 	}
 	public static MysqlDAOFactory getInstance()
@@ -76,6 +80,12 @@ public class MysqlDAOFactory extends DAOFactory
 	{
 		// TODO Auto-generated method stub
 		return new MySqlUserDao();
+	}
+	@Override
+	public AdminDAO getAdminDao()
+	{
+
+		return new MySqlAdminDao();
 	}
 
 }

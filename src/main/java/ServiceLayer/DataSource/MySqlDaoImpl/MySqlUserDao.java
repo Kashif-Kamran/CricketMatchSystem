@@ -19,7 +19,7 @@ public class MySqlUserDao implements UserDAO
 	@Override
 	public boolean addUser(User user) throws Exception
 	{
-		boolean check;
+		boolean check = false;
 		MysqlDAOFactory daoFactory = MysqlDAOFactory.getInstance();
 		Connection connect = daoFactory.getConnection();
 		PreparedStatement prepState = null;
@@ -36,14 +36,11 @@ public class MySqlUserDao implements UserDAO
 			check = true;
 		} catch (SQLIntegrityConstraintViolationException exc)
 		{
-			throw new IllegalArgumentException(
+			check = false;
+			throw new RuntimeException(
 					"User with userName : " + user.getUserName() + " is Already Present Choose New User Name ");
 
-		} catch (SQLException exc)
-		{
-			System.out.println("Exception while Insertion " + exc);
-			check = false;
-		}
+		} 
 		finally
 		{
 			daoFactory.freeConnection(connect);
@@ -80,7 +77,7 @@ public class MySqlUserDao implements UserDAO
 		MysqlDAOFactory daoFactory = MysqlDAOFactory.getInstance();
 		Connection connect = daoFactory.getConnection();
 		PreparedStatement prepState = null;
-		User user;
+		User user = null;
 		String query = "SELECT * FROM users WHERE user_name=?";
 		try
 		{
@@ -155,10 +152,8 @@ public class MySqlUserDao implements UserDAO
 		try
 		{
 			prepState = connect.prepareStatement(query);
-			System.out.println("UserName : " + user.getUserName());
 			prepState.setString(1, user.getUserName());
 			prepState.executeUpdate();
-			System.out.println("Deletion Program Complete");
 			check = true;
 		} catch (SQLException exc)
 		{
